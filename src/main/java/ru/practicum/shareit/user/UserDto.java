@@ -7,12 +7,9 @@ import ru.practicum.shareit.Create;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Data
 @AllArgsConstructor
-public class User {
+public class UserDto {
     private int id;
     @NotBlank(groups = {Create.class})
     private String name;

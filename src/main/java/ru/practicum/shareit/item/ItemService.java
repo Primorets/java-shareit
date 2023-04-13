@@ -4,4 +4,5 @@ import ru.practicum.shareit.item.dto.ItemDto;
 
 public interface ItemService {
     ItemDto searchItem();
+
 }

@@ -1,10 +1,12 @@
 package ru.practicum.shareit.item.dto;
 
-import org.springframework.stereotype.Component;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 
-@Component
-public class ItemRepository {
+public interface ItemRepository {
+        User findUserById(int id);
 
-    public User findUsrById;
+        Item saveItem(Item item);
+
+        Item updateItem(Item item);
 }
