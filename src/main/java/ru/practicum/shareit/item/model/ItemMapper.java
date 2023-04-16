@@ -6,12 +6,12 @@ import ru.practicum.shareit.user.User;
 
 @Component
 public class ItemMapper {
-    public static ItemDto toItemDto(Item item, User user) {
+    public static ItemDto toItemDto(Item item) {
         return new ItemDto(item.getId(),
                 item.getName(),
                 item.getDescription(),
                 item.getAvailable(),
-                user,
+                item.getOwner(),
                 item.getRequest());
     }
 

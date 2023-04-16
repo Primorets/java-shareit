@@ -6,6 +6,7 @@ import ru.practicum.shareit.Create;
 import ru.practicum.shareit.user.User;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * TODO Sprint add-controllers.
@@ -18,9 +19,8 @@ public class Item {
     private String name;
     @NotBlank(groups = {Create.class})
     private String description;
-    @NotBlank(groups = {Create.class})
+    @NotNull
     private Boolean available;
-    @NotBlank(groups = {Create.class})
     private User owner;
     @NotBlank(groups = {Create.class})
     private String request;

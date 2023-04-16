@@ -8,6 +8,8 @@ import ru.practicum.shareit.Create;
 import ru.practicum.shareit.Update;
 import ru.practicum.shareit.item.dto.ItemDto;
 
+import java.util.List;
+
 /**
  * TODO Sprint add-controllers.
  */
@@ -22,30 +24,40 @@ public class ItemController {
     ItemServiceImpl itemService;
 
     @GetMapping("/{id}")
-    public ItemDto getItem (@PathVariable(value = "id") int id){
+    public ItemDto getItem(@PathVariable(value = "id") int id) {
         log.info("Получен запрос на получение пользователя по ID: " + id);
         return itemService.getItemById(id);
     }
 
+    @GetMapping
+    public List<ItemDto> getAllItemsForOwnerById(@RequestHeader(OWNER) int ownerId) {
+        return itemService.getItemsByOwnerId(ownerId);
+    }
+
+    @ResponseBody
     @PostMapping
-    public ItemDto createItem(@RequestHeader(OWNER) int userId,
-                              @Validated({Create.class}) @RequestBody ItemDto itemDto){
+    public ItemDto createItem(@RequestHeader(OWNER) int ownerId,
+                              @Validated({Create.class}) @RequestBody ItemDto itemDto) {
         log.info("");
-        return itemService.createItem(itemDto);
+        return itemService.createItem(itemDto, ownerId);
     }
 
-    @PatchMapping
-    public ItemDto updateItem(@RequestHeader(OWNER) int userId,
-                              @Validated({Update.class}) @RequestBody ItemDto itemDto){
-        return itemService.updateItem(userId, itemDto);
+    @ResponseBody
+    @PatchMapping("/{itemId}")
+    public ItemDto updateItem(@RequestHeader(OWNER) int ownerId, @PathVariable int itemId,
+                              @Validated({Update.class}) @RequestBody ItemDto itemDto) {
+        return itemService.updateItem(ownerId, itemDto, itemId);
     }
 
-
+    @DeleteMapping("/{id}")
+    public void deleteItemById(@PathVariable(value = "id") int id) {
+        itemService.deleteItemById(id);
+    }
 
     @GetMapping("/search")
-    public ItemDto searchItem(@RequestParam String query){
+    public List<ItemDto> searchItem(@RequestParam String query) {
         log.info("Получен запрос на получение пользователя");
-        return itemService.searchItem();
+        return itemService.searchItem(query);
     }
 
 }
