@@ -2,7 +2,6 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NonNull;
 import ru.practicum.shareit.Create;
 import ru.practicum.shareit.user.User;
 

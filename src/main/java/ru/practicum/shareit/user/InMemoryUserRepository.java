@@ -4,13 +4,9 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.exception.DuplicateEmailException;
 import ru.practicum.shareit.exception.UserNotFoundException;
 
-import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 @Component
 public class InMemoryUserRepository implements UserRepository {
