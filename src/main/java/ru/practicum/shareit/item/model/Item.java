@@ -17,11 +17,9 @@ public class Item {
     private int id;
     @NotBlank(groups = {Create.class})
     private String name;
-    @NotBlank(groups = {Create.class})
     private String description;
     @NotNull
     private Boolean available;
     private User owner;
-    @NotBlank(groups = {Create.class})
     private String request;
 }

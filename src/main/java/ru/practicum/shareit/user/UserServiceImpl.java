@@ -20,7 +20,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ItemRepository itemRepository;
 
-
     @Override
     public UserDto getUserById(int id) {
         return UserMapper.toUserDto(userRepository.getUserById(id));

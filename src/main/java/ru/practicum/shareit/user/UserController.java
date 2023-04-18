@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.util.List;
 /**
  * TODO Sprint add-controllers.
  */
+@Slf4j
 @RestController
 @RequestMapping(path = "/users")
 public class UserController {
@@ -20,31 +22,34 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/{id}")
-    public UserDto getUserById(@PathVariable int id){
+    public UserDto getUserById(@PathVariable int id) {
+        log.info("Получен запрос на получение пользователя по ID: " + id);
         return userService.getUserById(id);
     }
 
     @GetMapping
-    public List<UserDto> getUserById(){
+    public List<UserDto> getAllUsers() {
+        log.info("Получен запрос на получение всех пользователей.");
         return userService.getAllUsers();
     }
 
     @ResponseBody
     @PostMapping
-    public UserDto createUser(@RequestBody @Validated(Create.class) User user){
+    public UserDto createUser(@RequestBody @Validated(Create.class) User user) {
+        log.info("Добавлен пользователь: " + user);
         return userService.createUser(user);
     }
 
     @ResponseBody
     @PatchMapping("/{id}")
-    public UserDto updateUser(@RequestBody @Validated(Update.class) User user, @PathVariable int id){
-        return userService.updateUser(user,id);
+    public UserDto updateUser(@RequestBody @Validated(Update.class) User user, @PathVariable int id) {
+        log.info("Получен запрос на изменение данных о пользователе с ID: " + id);
+        return userService.updateUser(user, id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUserById(@PathVariable int id){
-         userService.deleteUserById(id);
+    public void deleteUserById(@PathVariable int id) {
+        log.info("Получен запрос на удаление пользователя с ID: " + id);
+        userService.deleteUserById(id);
     }
-
-
 }

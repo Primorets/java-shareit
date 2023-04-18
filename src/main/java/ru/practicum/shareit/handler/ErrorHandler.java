@@ -20,19 +20,19 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handlerItemNotFound(final ItemNotFoundException itemNotFoundException){
+    public ErrorResponse handlerItemNotFound(final ItemNotFoundException itemNotFoundException) {
         return new ErrorResponse(itemNotFoundException.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handlerValidationException (ValidationException validationException){
+    public ErrorResponse handlerValidationException(ValidationException validationException) {
         return new ErrorResponse(validationException.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handlerDuplicateEmailException(DuplicateEmailException duplicateEmailException){
+    public ErrorResponse handlerDuplicateEmailException(DuplicateEmailException duplicateEmailException) {
         return new ErrorResponse(duplicateEmailException.getMessage());
     }
 }

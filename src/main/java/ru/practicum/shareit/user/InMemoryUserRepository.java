@@ -25,20 +25,20 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public User getUserById(int id) {
+        checkId(id);
         return usersMap.get(id);
     }
 
     @Override
     public void deleteUserById(int id) {
+        checkId(id);
         usersMap.remove(id);
     }
 
     @Override
     public User updateUser(User user, int id) {
         user.setId(id);
-        if (id == 0 || !usersMap.containsKey(id)) {
-            throw new UserNotFoundException("Пользователь не найден");
-        }
+        checkId(id);
         if (user.getEmail() == null) {
             user.setEmail(usersMap.get(user.getId()).getEmail());
         }
@@ -65,17 +65,23 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     private boolean checkUniqueEmail(User user) {
-        if(usersMap.containsKey(user.getId())){
-            if(usersMap.values().stream()
+        if (usersMap.containsKey(user.getId())) {
+            if (usersMap.values().stream()
                     .filter(user1 -> user1.getId() != user.getId())
                     .anyMatch(user1 -> user1.getEmail()
-                            .equals(user.getEmail()))){
+                            .equals(user.getEmail()))) {
                 throw new DuplicateEmailException("Email уже зарегестрирован");
 
             }
-        } else if (usersMap.values().stream().anyMatch(user1 -> user1.getEmail().equals(user.getEmail()))){
+        } else if (usersMap.values().stream().anyMatch(user1 -> user1.getEmail().equals(user.getEmail()))) {
             throw new DuplicateEmailException("Email уже зарегестрирован");
         }
         return true;
+    }
+
+    private void checkId(int id) {
+        if (!usersMap.containsKey(id)) {
+            throw new UserNotFoundException("Пользователя с данным ID не существует");
+        }
     }
 }

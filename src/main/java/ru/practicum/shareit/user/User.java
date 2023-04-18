@@ -14,6 +14,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @AllArgsConstructor
 public class User {
+
     private int id;
     @NotBlank(groups = {Create.class})
     private String name;
