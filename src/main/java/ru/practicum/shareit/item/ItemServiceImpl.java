@@ -72,11 +72,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private void validationItem(ItemDto itemDto) {
-        if (itemDto.getName() == null ) {
+        if (itemDto.getName() == null) {
             throw new ValidationException("Ошибка в теле запроса. Отсутствует имя. ");
-        } else if(itemDto.getDescription() == null){
+        } else if (itemDto.getDescription() == null) {
             throw new ValidationException("Ошибка в теле запроса. Отсутствует описание. ");
-        } else if (itemDto.getAvailable() == null){
+        } else if (itemDto.getAvailable() == null) {
             throw new ValidationException("Ошибка в теле запроса. Отсутствует статус.");
         }
     }
