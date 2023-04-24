@@ -35,4 +35,10 @@ public class ErrorHandler {
     public ErrorResponse handlerDuplicateEmailException(DuplicateEmailException duplicateEmailException) {
         return new ErrorResponse(duplicateEmailException.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handlerRuntimeException(RuntimeException runtimeException) {
+        return new ErrorResponse(runtimeException.getMessage());
+    }
 }

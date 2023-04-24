@@ -6,13 +6,14 @@ import ru.practicum.shareit.item.model.Item;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
 @Component
 public class InMemoryItemRepository implements ItemRepository {
 
-    private HashMap<Integer, Item> itemsMap;
+    private Map<Integer, Item> itemsMap;
     private Integer itemId;
 
     public InMemoryItemRepository() {

@@ -7,11 +7,12 @@ import ru.practicum.shareit.exception.UserNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class InMemoryUserRepository implements UserRepository {
 
-    private HashMap<Integer, User> usersMap;
+    private Map<Integer, User> usersMap;
     private int userId;
 
     public InMemoryUserRepository() {
