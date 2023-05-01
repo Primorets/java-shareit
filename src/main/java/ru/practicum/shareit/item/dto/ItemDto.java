@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 public class ItemDto {
-    private int id;
+    private Long id;
     @NotBlank(groups = {Create.class})
     private String name;
     private String description;
