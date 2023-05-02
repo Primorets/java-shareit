@@ -38,9 +38,9 @@ public class UserController {
 
     @ResponseBody
     @PostMapping
-    public UserDto createUser(@RequestBody @Validated(Create.class) UserDto user) {
-        log.info("Добавлен пользователь: " + user);
-        return userService.createUser(user);
+    public UserDto createUser(@RequestBody @Validated(Create.class) UserDto userDto) {
+        log.info("Добавлен пользователь: " + userDto);
+        return userService.createUser(userDto);
     }
 
     @ResponseBody

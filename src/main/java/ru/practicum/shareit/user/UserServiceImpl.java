@@ -42,6 +42,15 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(UserDto user, Long id) {
         user.setId(id);
         User user1 = userRepository.findById(user.getId()).orElseThrow(()->new UserNotFoundException(""));
+        /*if(userRepository.findUserByEmail(user.getEmail()).isPresent()){
+            throw new ValidationException("");
+        }*/
+        if (user.getEmail() == null) {
+            user.setEmail(user1.getEmail());
+        }
+        if (user.getName() == null) {
+            user.setName(user1.getName());
+        }
         if (userRepository.findById(id).stream()
                 .filter(user2 -> !Objects.equals(user2.getId(), user.getId()))
                 .anyMatch(user2 -> user2.getEmail()

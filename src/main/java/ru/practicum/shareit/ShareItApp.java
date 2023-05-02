@@ -7,6 +7,7 @@ import ru.practicum.shareit.booking.BookingController;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.BookingServiceImpl;
 import ru.practicum.shareit.booking.dto.BookingMapper;
+import ru.practicum.shareit.handler.ErrorHandler;
 import ru.practicum.shareit.item.ItemController;
 import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.item.ItemService;
@@ -16,7 +17,7 @@ import ru.practicum.shareit.user.*;
 
 
 @SpringBootApplication
-@ComponentScan(basePackageClasses = {UserRepository.class, ItemRepository.class, BookingRepository.class, UserController.class, UserService.class, ItemService.class, UserMapper.class, ItemMapper.class, BookingMapper.class, UserServiceImpl.class, UserRepository.class, ItemServiceImpl.class, ItemController.class, ItemRepository.class, BookingRepository.class, BookingController.class, BookingServiceImpl.class})
+@ComponentScan(basePackageClasses = {UserRepository.class, ItemRepository.class, BookingRepository.class, UserController.class, UserService.class, ItemService.class, UserMapper.class, ItemMapper.class, BookingMapper.class, UserServiceImpl.class, UserRepository.class, ItemServiceImpl.class, ItemController.class, ItemRepository.class, BookingRepository.class, BookingController.class, BookingServiceImpl.class, ErrorHandler.class})
 //@EntityScan(basePackageClasses = {User.class, Item.class, Comment.class, Booking.class})
 public class ShareItApp {
 
