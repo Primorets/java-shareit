@@ -24,16 +24,16 @@ import static java.util.stream.Collectors.toList;
 @Service
 public class ItemServiceImpl implements ItemService {
 
-    @Autowired
-    ItemRepository itemRepository;
 
     @Autowired
-    UserRepository userRepository;
-
+    private ItemRepository itemRepository;
     @Autowired
-    BookingService bookingService;
+    private UserRepository userRepository;
+    @Autowired
+    private BookingService bookingService;
     @Autowired
     private CommentRepository commentRepository;
+
 
     @Override
     public ItemDto createItem(ItemDto itemDto, Long ownerId) {

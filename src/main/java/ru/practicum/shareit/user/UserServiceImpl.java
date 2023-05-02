@@ -1,12 +1,12 @@
 package ru.practicum.shareit.user;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.DuplicateEmailException;
 import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
-import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import java.util.List;
@@ -15,13 +15,11 @@ import java.util.Objects;
 import static java.util.stream.Collectors.toList;
 
 @Service
-@Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private ItemRepository itemRepository;
 
     @Override
     public UserDto getUserById(Long id) {
@@ -33,13 +31,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll().stream().map(UserMapper::toUserDto).collect(toList());
     }
 
+    @Transactional
     @Override
     public void deleteUserById(Long id) {
-        itemRepository.deleteById(id);
+        userRepository.deleteById(id);
     }
 
+    @Transactional
     @Override
-    public UserDto updateUser(User user, Long id) {
+    public UserDto updateUser(UserDto user, Long id) {
         user.setId(id);
         User user1 = userRepository.findById(user.getId()).orElseThrow(()->new UserNotFoundException(""));
         if (userRepository.findById(id).stream()
@@ -49,21 +49,21 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateEmailException("Email уже зарегестрирован");
 
         }
-        return UserMapper.toUserDto(userRepository.save(user));
+        return UserMapper.toUserDto(userRepository.save(UserMapper.toUser(user)));
     }
 
+    @Transactional
     @Override
-    public UserDto createUser(User user) {
+    public UserDto createUser(UserDto user) {
         validateUser(user);
         try {
-            return UserMapper.toUserDto(userRepository.save(user));
+            return UserMapper.toUserDto(userRepository.save(UserMapper.toUser(user)));
         } catch (DuplicateEmailException duplicateEmailException) {
-        throw new DuplicateEmailException("Email уже зарегестрирован");
+            throw new DuplicateEmailException("Email уже зарегестрирован");
         }
-
     }
 
-    private void validateUser(User user) {
+    private void validateUser(UserDto user) {
         if (!user.getEmail().contains("@") || user.getEmail() == null) {
             throw new ValidationException("Введён не правильный email");
         }

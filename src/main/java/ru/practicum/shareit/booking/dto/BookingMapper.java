@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking.dto;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.Status;
@@ -8,17 +9,16 @@ import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.model.ItemMapper;
 import ru.practicum.shareit.user.UserMapper;
 import ru.practicum.shareit.user.UserService;
+
 @Component
 public class BookingMapper {
 
-    private UserService userService;
-    private ItemService itemService;
 
     @Autowired
-    public BookingMapper(UserService userService, ItemService itemService) {
-        this.userService = userService;
-        this.itemService = itemService;
-    }
+    @Lazy
+    private ItemService itemService;
+    @Autowired
+    private UserService userService;
 
     public BookingDto toBookingDto(Booking booking) {
         if (booking != null) {

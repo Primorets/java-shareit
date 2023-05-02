@@ -23,7 +23,7 @@ public class ItemController {
     private static final String OWNER = "X-Sharer-User-Id";
 
     @Autowired
-    ItemServiceImpl itemService;
+    private ItemService itemService;
 
     @GetMapping("/{id}")
     public ItemDto getItem(@PathVariable(value = "id") Long id) {

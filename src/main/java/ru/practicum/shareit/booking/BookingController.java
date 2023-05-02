@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -15,12 +16,12 @@ import java.util.List;
  */
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "/bookings")
 public class BookingController {
     private static final String BOOKER_ID = "X-Sharer-User-Id";
-
     @Autowired
-    BookingService bookingService;
+    private BookingService bookingService;
 
     @GetMapping("/{bookingId}")
     public BookingDto getBookingById(@PathVariable(value = "bookingId") Long id) {

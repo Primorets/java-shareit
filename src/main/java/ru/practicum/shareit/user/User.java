@@ -20,10 +20,13 @@ import javax.validation.constraints.NotBlank;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
     @NotBlank(groups = {Create.class})
+    @Column(name = "name")
     private String name;
     @Email
     @NotBlank(groups = {Create.class})
+    @Column(name = "email")
     private String email;
 }

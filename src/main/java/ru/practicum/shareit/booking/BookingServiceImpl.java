@@ -1,5 +1,6 @@
 package ru.practicum.shareit.booking;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
@@ -16,23 +17,18 @@ import ru.practicum.shareit.item.ItemService;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@RequiredArgsConstructor
 @Service
 public class BookingServiceImpl implements BookingService {
 
-    private BookingRepository bookingRepository;
-    private BookingMapper bookingMapper;
-
-    private ItemService itemService;
 
     @Autowired
+    private BookingMapper bookingMapper;
+    @Autowired
     @Lazy
-    public BookingServiceImpl(BookingRepository bookingRepository, BookingMapper bookingMapper,
-                              ItemService itemService) {
-        this.bookingRepository = bookingRepository;
-        this.bookingMapper = bookingMapper;
-        this.itemService = itemService;
-    }
+    private ItemService itemService;
+    @Autowired
+    private BookingRepository bookingRepository;
 
     @Override
     public BookingDto createBooking(InputBookingDto inputBookingDto, Long bookerId) {
