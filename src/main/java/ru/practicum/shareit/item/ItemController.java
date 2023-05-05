@@ -25,10 +25,10 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
-    @GetMapping("/{id}")
-    public ItemDto getItem(@PathVariable(value = "id") Long id) {
+    @GetMapping("/{itemId}")
+    public ItemDto getItem(@PathVariable(value = "itemId") Long id, @RequestHeader(OWNER) Long ownerId) {
         log.info("Получен запрос на получение предмета по ID: " + id);
-        return itemService.getItemById(id);
+        return itemService.getItemById(id,ownerId);
     }
 
     @GetMapping

@@ -11,14 +11,16 @@ public interface BookingService {
 
     BookingDto updateBooking(Long bookerId, Long bookingId, Boolean approved);
 
-    BookingDto getBookingById(Long id);
-
-    List<BookingDto> getBookingByOwnerId(Long bookerId, String state);
-
-    ShortBookingDto getNextBooking(Long itemId);
+    BookingDto getBookingById(Long bookingId, Long userId);
 
     List<BookingDto> getBookingsByBookerId(Long bookerId, String state);
 
+    ShortBookingDto getNextBooking(Long itemId);
+
+    List<BookingDto> getBookingsByOwnerId(Long bookerId, String state);
+
     ShortBookingDto getLastBooking(Long itemId);
     Booking getBookedItemWithBooker(Long itemId, Long userId);
+
+
 }

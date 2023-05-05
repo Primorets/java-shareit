@@ -20,12 +20,17 @@ public class BookingMapper {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    @Lazy
+    private ItemMapper itemMapper;
+
+
     public BookingDto toBookingDto(Booking booking) {
         if (booking != null) {
             return new BookingDto(booking.getId(),
                     booking.getStart(),
                     booking.getEnd(),
-                    ItemMapper.toItemDto(booking.getItem()),
+                    itemMapper.toItemDto(booking.getItem()),
                     UserMapper.toUserDto(booking.getBooker()),
                     booking.getStatus());
         } else {
@@ -47,9 +52,8 @@ public class BookingMapper {
         return new Booking(null,
                 inputBookingDto.getStart(),
                 inputBookingDto.getEnd(),
-                ItemMapper.toItem(itemService.getItemById(inputBookingDto.getId()),
-                        UserMapper.toUser(userService.getUserById(bookerId))),
-                UserMapper.toUser(userService.getUserById(bookerId)),
+                itemService.getItemByIdForBookingMapper(inputBookingDto.getItemId()),
+                userService.getUserForBookingMapper(bookerId),
                 Status.WAITING);
     }
 }

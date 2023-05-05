@@ -72,6 +72,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public User getUserForBookingMapper(Long id){
+        return userRepository.findById(id).orElseThrow(()->new UserNotFoundException(""));
+    }
+
     private void validateUser(UserDto user) {
         if (!user.getEmail().contains("@") || user.getEmail() == null) {
             throw new ValidationException("Введён не правильный email");

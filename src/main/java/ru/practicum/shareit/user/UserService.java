@@ -15,4 +15,6 @@ public interface UserService {
     UserDto updateUser(UserDto user, Long id);
 
     UserDto createUser(UserDto user);
+
+    User getUserForBookingMapper(Long id);
 }

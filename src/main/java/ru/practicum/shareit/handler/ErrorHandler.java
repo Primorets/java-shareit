@@ -1,6 +1,7 @@
 package ru.practicum.shareit.handler;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -51,5 +52,12 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handlerRuntimeException(RuntimeException runtimeException) {
         return new ErrorResponse(runtimeException.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlerMethodValidException(final MethodArgumentNotValidException argumentNotValidException)
+            throws Throwable {
+        throw new Throwable(" ");
     }
 }
