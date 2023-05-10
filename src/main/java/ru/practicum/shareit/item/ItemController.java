@@ -28,7 +28,7 @@ public class ItemController {
     @GetMapping("/{itemId}")
     public ItemDto getItem(@PathVariable(value = "itemId") Long id, @RequestHeader(OWNER) Long ownerId) {
         log.info("Получен запрос на получение предмета по ID: " + id);
-        return itemService.getItemById(id,ownerId);
+        return itemService.getItemById(id, ownerId);
     }
 
     @GetMapping
@@ -69,7 +69,7 @@ public class ItemController {
     @PostMapping("/{itemId}/comment")
     public CommentDto createComment(@Valid @RequestBody CommentDto commentDto,
                                     @RequestHeader(OWNER) Long userId,
-                                    @PathVariable Long itemId){
-        return itemService.createComment(commentDto,itemId,userId);
+                                    @PathVariable Long itemId) {
+        return itemService.createComment(commentDto, itemId, userId);
     }
 }

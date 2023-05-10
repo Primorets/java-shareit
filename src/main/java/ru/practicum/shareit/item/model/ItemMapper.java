@@ -14,6 +14,7 @@ import ru.practicum.shareit.user.User;
 public class ItemMapper {
 
     @Autowired
+    @Lazy
     private BookingService bookingService;
 
     @Autowired
@@ -26,22 +27,22 @@ public class ItemMapper {
                 item.getDescription(),
                 item.getAvailable(),
                 item.getOwner(),
-                item.getRequestId()!=null? item.getRequestId() : null,
+                item.getRequestId() != null ? item.getRequestId() : null,
                 null,
                 null,
                 itemService.getCommentsToIemByItemId(item.getId()));
     }
 
-    public  Item toItem(ItemDto itemDto, User user) {
+    public Item toItem(ItemDto itemDto, User user) {
         return new Item(itemDto.getId(),
                 itemDto.getName(),
                 itemDto.getDescription(),
                 itemDto.getAvailable(),
                 user,
-                itemDto.getRequestId()!=null? itemDto.getRequestId() : null);
+                itemDto.getRequestId() != null ? itemDto.getRequestId() : null);
     }
 
-    public CommentDto toCommentDto(Comment comment){
+    public CommentDto toCommentDto(Comment comment) {
         return new CommentDto(
                 comment.getId(),
                 comment.getText(),
@@ -50,16 +51,16 @@ public class ItemMapper {
                 comment.getCreated());
     }
 
-    public ItemDto toFullItemDto(Item item){
+    public ItemDto toFullItemDto(Item item) {
         return new ItemDto(item.getId(),
                 item.getName(),
                 item.getDescription(),
                 item.getAvailable(),
                 item.getOwner(),
-                item.getRequestId()!=null? item.getRequestId() : null,
+                item.getRequestId() != null ? item.getRequestId() : null,
                 bookingService.getLastBooking(item.getId()),
                 bookingService.getNextBooking(item.getId()),
                 itemService.getCommentsToIemByItemId(item.getId())
-                );
+        );
     }
 }

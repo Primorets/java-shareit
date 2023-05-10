@@ -23,7 +23,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(Long id) {
-        return UserMapper.toUserDto(userRepository.findById(id).orElseThrow(()->new UserNotFoundException("")));
+        return UserMapper.toUserDto(userRepository.findById(id).orElseThrow(()
+                -> new UserNotFoundException("Пользователь не был зарегестрирован.")));
     }
 
     @Override
@@ -41,10 +42,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(UserDto user, Long id) {
         user.setId(id);
-        User user1 = userRepository.findById(user.getId()).orElseThrow(()->new UserNotFoundException(""));
-        /*if(userRepository.findUserByEmail(user.getEmail()).isPresent()){
-            throw new ValidationException("");
-        }*/
+        User user1 = userRepository.findById(user.getId()).orElseThrow(()
+                -> new UserNotFoundException("Пользователь не был зарегестрирован."));
         if (user.getEmail() == null) {
             user.setEmail(user1.getEmail());
         }
@@ -73,8 +72,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserForBookingMapper(Long id){
-        return userRepository.findById(id).orElseThrow(()->new UserNotFoundException(""));
+    public User getUserForBookingMapper(Long id) {
+        return userRepository.findById(id).orElseThrow(()
+                -> new UserNotFoundException("Пользователь не был зарегестрирован."));
     }
 
     private void validateUser(UserDto user) {

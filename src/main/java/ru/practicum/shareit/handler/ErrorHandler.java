@@ -38,13 +38,13 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handlerBookingNotFoundException(BookingNotFoundException bookingNotFoundException){
+    public ErrorResponse handlerBookingNotFoundException(BookingNotFoundException bookingNotFoundException) {
         return new ErrorResponse(bookingNotFoundException.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handlerValid(ConstraintViolationException constraintViolationException){
+    public ErrorResponse handlerValid(ConstraintViolationException constraintViolationException) {
         return new ErrorResponse(constraintViolationException.getMessage());
     }
 

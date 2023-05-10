@@ -18,6 +18,7 @@ public class CommentDto {
     private String text;
     @JsonIgnore
     private Item item;
-    private String author;
+    private String authorName;
     private LocalDateTime created;
 }
+
