@@ -4,14 +4,17 @@ import ru.practicum.shareit.user.dto.UserDto;
 
 import java.util.List;
 
+
 public interface UserService {
-    UserDto getUserById(int id);
+    UserDto getUserById(Long id);
 
     List<UserDto> getAllUsers();
 
-    void deleteUserById(int id);
+    void deleteUserById(Long id);
 
-    UserDto updateUser(User user, int id);
+    UserDto updateUser(UserDto user, Long id);
 
-    UserDto createUser(User user);
+    UserDto createUser(UserDto user);
+
+    User getUserForBookingMapper(Long id);
 }

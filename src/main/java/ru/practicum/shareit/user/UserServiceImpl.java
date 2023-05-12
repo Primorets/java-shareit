@@ -1,51 +1,83 @@
 package ru.practicum.shareit.user;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.exception.DuplicateEmailException;
+import ru.practicum.shareit.exception.UserNotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
-import ru.practicum.shareit.item.ItemRepository;
 import ru.practicum.shareit.user.dto.UserDto;
 
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private ItemRepository itemRepository;
 
     @Override
-    public UserDto getUserById(int id) {
-        return UserMapper.toUserDto(userRepository.getUserById(id));
+    public UserDto getUserById(Long id) {
+        return UserMapper.toUserDto(userRepository.findById(id).orElseThrow(()
+                -> new UserNotFoundException("Пользователь не был зарегестрирован.")));
     }
 
     @Override
     public List<UserDto> getAllUsers() {
-        return userRepository.getAllUsers().stream().map(UserMapper::toUserDto).collect(toList());
+        return userRepository.findAll().stream().map(UserMapper::toUserDto).collect(toList());
     }
 
+    @Transactional
     @Override
-    public void deleteUserById(int id) {
-        itemRepository.deleteItemsByOwner(id);
-        userRepository.deleteUserById(id);
+    public void deleteUserById(Long id) {
+        userRepository.deleteById(id);
     }
 
+    @Transactional
     @Override
-    public UserDto updateUser(User user, int id) {
-        return UserMapper.toUserDto(userRepository.updateUser(user, id));
+    public UserDto updateUser(UserDto user, Long id) {
+        user.setId(id);
+        User user1 = userRepository.findById(user.getId()).orElseThrow(()
+                -> new UserNotFoundException("Пользователь не был зарегестрирован."));
+        if (user.getEmail() == null) {
+            user.setEmail(user1.getEmail());
+        }
+        if (user.getName() == null) {
+            user.setName(user1.getName());
+        }
+        if (userRepository.findById(id).stream()
+                .filter(user2 -> !Objects.equals(user2.getId(), user.getId()))
+                .anyMatch(user2 -> user2.getEmail()
+                        .equals(user.getEmail()))) {
+            throw new DuplicateEmailException("Email уже зарегестрирован");
+
+        }
+        return UserMapper.toUserDto(userRepository.save(UserMapper.toUser(user)));
     }
 
+    @Transactional
     @Override
-    public UserDto createUser(User user) {
+    public UserDto createUser(UserDto user) {
         validateUser(user);
-        return UserMapper.toUserDto(userRepository.saveUser(user));
+        try {
+            return UserMapper.toUserDto(userRepository.save(UserMapper.toUser(user)));
+        } catch (DuplicateEmailException duplicateEmailException) {
+            throw new DuplicateEmailException("Email уже зарегестрирован");
+        }
     }
 
-    private void validateUser(User user) {
+    @Override
+    public User getUserForBookingMapper(Long id) {
+        return userRepository.findById(id).orElseThrow(()
+                -> new UserNotFoundException("Пользователь не был зарегестрирован."));
+    }
+
+    private void validateUser(UserDto user) {
         if (!user.getEmail().contains("@") || user.getEmail() == null) {
             throw new ValidationException("Введён не правильный email");
         }
