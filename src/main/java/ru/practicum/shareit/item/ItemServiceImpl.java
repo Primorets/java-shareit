@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemMapper;
+import ru.practicum.shareit.pageable.Pagination;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 
@@ -22,6 +24,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+@AllArgsConstructor
 @Service
 public class ItemServiceImpl implements ItemService {
 
@@ -89,12 +92,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> searchItem(String text) {
+    public List<ItemDto> searchItem(String text, int from, int size) {
         if (text.isEmpty()) {
             return new ArrayList<>();
         }
         text = text.toLowerCase();
-        return itemRepository.searchItem(text).stream()
+        return itemRepository.searchItem(text, Pagination.makePageRequest(from, size)).stream()
                 .map(itemMapper::toItemDto)
                 .collect(toList());
     }
@@ -105,8 +108,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> getItemsByOwnerId(Long ownerId) {
-        return itemRepository.getItemsByOwnerId(ownerId).stream()
+    public List<ItemDto> getItemsByOwnerId(Long ownerId, int from, int size) {
+        return itemRepository.getItemsByOwnerId(ownerId, Pagination.makePageRequest(from, size)).stream()
                 .map(itemMapper::toFullItemDto)
                 .sorted(Comparator.comparing(ItemDto::getId))
                 .collect(toList());
@@ -131,6 +134,13 @@ public class ItemServiceImpl implements ItemService {
     public List<CommentDto> getCommentsToIemByItemId(Long itemId) {
         return commentRepository.findAllByItem_IdOrderByCreatedDesc(itemId).stream()
                 .map(itemMapper::toCommentDto)
+                .collect(toList());
+    }
+
+    @Override
+    public List<ItemDto> getItemsByRequestId(Long requestId) {
+        return itemRepository.findAllByRequestIdOrderByIdDesc(requestId).stream()
+                .map(itemMapper::toItemDto)
                 .collect(toList());
     }
 

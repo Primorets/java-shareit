@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
         if (user.getName() == null) {
             user.setName(user1.getName());
         }
-        if (userRepository.findById(id).stream()
+        if (userRepository.findAll().stream()
                 .filter(user2 -> !Objects.equals(user2.getId(), user.getId()))
                 .anyMatch(user2 -> user2.getEmail()
                         .equals(user.getEmail()))) {

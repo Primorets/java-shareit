@@ -32,9 +32,11 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDto> getAllItemsForOwnerById(@RequestHeader(OWNER) Long ownerId) {
+    public List<ItemDto> getAllItemsForOwnerById(@RequestHeader(OWNER) Long ownerId,
+                                                 @RequestParam(required = false, defaultValue = "0") int from,
+                                                 @RequestParam(required = false, defaultValue = "20") int size) {
         log.info("Получен запрос на получение всех предметов.");
-        return itemService.getItemsByOwnerId(ownerId);
+        return itemService.getItemsByOwnerId(ownerId, from, size);
     }
 
     @ResponseBody
@@ -60,9 +62,11 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDto> searchItem(@RequestParam String text) {
+    public List<ItemDto> searchItem(@RequestParam String text,
+                                    @RequestParam(required = false, defaultValue = "0") int from,
+                                    @RequestParam(required = false, defaultValue = "20") int size) {
         log.info("Получен запрос на получение предмета по строке");
-        return itemService.searchItem(text);
+        return itemService.searchItem(text, from, size);
     }
 
     @ResponseBody

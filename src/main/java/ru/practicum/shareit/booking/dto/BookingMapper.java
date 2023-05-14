@@ -14,6 +14,7 @@ import ru.practicum.shareit.user.UserService;
 public class BookingMapper {
 
     @Autowired
+    @Lazy
     private ItemService itemService;
     @Autowired
     private UserService userService;
