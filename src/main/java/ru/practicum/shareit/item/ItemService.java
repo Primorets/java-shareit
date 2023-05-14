@@ -15,13 +15,15 @@ public interface ItemService {
 
     Item getItemByIdForBookingMapper(Long id);
 
-    List<ItemDto> searchItem(String query);
+    List<ItemDto> searchItem(String query, int from, int size);
 
     void deleteItemById(Long itemId);
 
-    List<ItemDto> getItemsByOwnerId(Long ownerId);
+    List<ItemDto> getItemsByOwnerId(Long ownerId, int from, int size);
 
     CommentDto createComment(CommentDto commentDto, Long itemId, Long userId);
 
     List<CommentDto> getCommentsToIemByItemId(Long itemId);
+
+    List<ItemDto> getItemsByRequestId(Long id);
 }

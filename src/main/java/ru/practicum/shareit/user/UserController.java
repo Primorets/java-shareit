@@ -20,7 +20,6 @@ import java.util.List;
 @RequestMapping(path = "/users")
 public class UserController {
 
-
     @Autowired
     private UserService userService;
 
