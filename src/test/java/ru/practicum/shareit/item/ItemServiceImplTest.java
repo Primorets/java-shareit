@@ -11,6 +11,7 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.InputBookingDto;
 import ru.practicum.shareit.exception.ItemNotFoundException;
 import ru.practicum.shareit.exception.UserNotFoundException;
+import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.ItemMapper;
@@ -64,6 +65,29 @@ class ItemServiceImplTest {
         ItemDto newItem = itemService.createItem(itemDto, newUser.getId());
         ItemDto getItem = itemService.getItemById(newItem.getId(), newUser.getId());
         assertThat(getItem.getDescription(), equalTo(itemDto.getDescription()));
+    }
+
+    @Test
+    void createItemNotValidItem() {
+        UserDto newUser = userService.createUser(userDto1);
+        ItemDto newItem = new ItemDto(1L, null, "black",
+                true, user,
+                null, null, null, null);
+        ValidationException validationException = assertThrows(ValidationException.class,
+                () -> itemService.createItem(newItem, newUser.getId()));
+        assertEquals("Ошибка в теле запроса. Отсутствует имя. ", validationException.getMessage());
+        ItemDto newItem2 = new ItemDto(1L, "es", null,
+                true, user,
+                null, null, null, null);
+        ValidationException validationException2 = assertThrows(ValidationException.class,
+                () -> itemService.createItem(newItem2, newUser.getId()));
+        assertEquals("Ошибка в теле запроса. Отсутствует описание. ", validationException2.getMessage());
+        ItemDto newItem3 = new ItemDto(1L, "es", "black",
+                null, user,
+                null, null, null, null);
+        ValidationException validationException3 = assertThrows(ValidationException.class,
+                () -> itemService.createItem(newItem3, newUser.getId()));
+        assertEquals("Ошибка в теле запроса. Отсутствует статус.", validationException3.getMessage());
     }
 
     @Test
@@ -127,6 +151,8 @@ class ItemServiceImplTest {
 
         List<ItemDto> itemDtoList = itemService.getItemsByOwnerId(owner.getId(), 0, 10);
         assertEquals(2, itemDtoList.size());
+
+
     }
 
     @Test

@@ -2,7 +2,6 @@ package ru.practicum.shareit.booking;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Lazy;
@@ -72,6 +71,39 @@ class BookingServiceImplTest {
     }
 
     @Test
+    void createBookingNotValidUser() {
+        InputBookingDto bookingDto1 = new InputBookingDto(1L, LocalDateTime.now(), LocalDateTime.now().plusHours(5));
+        UserNotFoundException userNotFoundException = assertThrows(UserNotFoundException.class,
+                () -> bookingService.createBooking(bookingDto1, 25L));
+        assertEquals("Пользователь не был зарегестрирован.", userNotFoundException.getMessage());
+    }
+
+    @Test
+    void createBookingNotValidTime() {
+        InputBookingDto bookingDto1 = new InputBookingDto(1L, LocalDateTime.now(),
+                LocalDateTime.now().minusDays(1));
+        ValidationException validationException = assertThrows(ValidationException.class,
+                () -> bookingService.createBooking(bookingDto1, 1L));
+        assertEquals(" Время не начала бронирования после его окончания. ", validationException.getMessage());
+
+        InputBookingDto bookingDto2 = new InputBookingDto(2L, LocalDateTime.now().minusDays(1),
+                LocalDateTime.now().plusHours(6));
+        ItemNotFoundException itemNotFoundException = assertThrows(ItemNotFoundException.class,
+                () -> bookingService.createBooking(bookingDto2, 1L));
+        assertEquals("Предмет не найден.",
+                itemNotFoundException.getMessage());
+
+        InputBookingDto bookingDto3 = new InputBookingDto(1L,
+                LocalDateTime.of(2023, 10, 10, 10, 10, 10),
+                LocalDateTime.of(2023, 10, 10, 10, 10, 10));
+        ValidationException validationException3 = assertThrows(ValidationException.class,
+                () -> bookingService.createBooking(bookingDto3, 1L));
+        assertEquals(" Время начала бронирования совпадает с его окончанием. ",
+                validationException3.getMessage());
+
+    }
+
+    @Test
     void updateBookingTest() throws UserNotFoundException, ItemNotFoundException, BookingNotFoundException {
         BookingDto bookingDto1 = bookingService.updateBooking(1L, 1L, true);
         assertEquals(Status.APPROVED, bookingDto1.getStatus());
@@ -83,31 +115,16 @@ class BookingServiceImplTest {
         BookingDto booking2 = bookingService.createBooking(new InputBookingDto(1L, LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3)), booker.getId());
         assertEquals(booking2, bookingService.getBookingById(2L, 1L));
         BookingNotFoundException exception = assertThrows(BookingNotFoundException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        bookingService.getBookingById(5L, 1L);
-                    }
-                });
+                () -> bookingService.getBookingById(5L, 1L));
         assertEquals("Бронирование не найдено.", exception.getMessage());
         UserNotFoundException exception1 = assertThrows(UserNotFoundException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        bookingService.getBookingById(1L, 3L);
-                    }
-                });
+                () -> bookingService.getBookingById(1L, 3L));
         assertEquals("Пользователь не был зарегестрирован.", exception1.getMessage());
 
         UserDto unBooker = userService.createUser(new UserDto(null, "kamen2", "kamen2@gmail.com"));
 
         UserNotFoundException exception2 = assertThrows(UserNotFoundException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        bookingService.getBookingById(2L, 3L);
-                    }
-                });
+                () -> bookingService.getBookingById(2L, 3L));
         assertEquals(" Проверить данные бронирования может только владелец вещи. ", exception2.getMessage());
     }
 
@@ -121,13 +138,9 @@ class BookingServiceImplTest {
         assertEquals(List.of(bookingDto), bookingService.getBookingsByBookerId(booker.getId(), "CURRENT", 0, 1));
         assertEquals(List.of(booking2), bookingService.getBookingsByBookerId(booker.getId(), "ALL", 0, 1));
         ValidationException exception = assertThrows(ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        bookingService.getBookingsByOwnerId(booker.getId(), "PPPP", 0, 1);
-                    }
-                });
+                () -> bookingService.getBookingsByBookerId(booker.getId(), "PPPP", 0, 1));
         assertEquals("Unknown state: UNSUPPORTED_STATUS", exception.getMessage());
+
     }
 
     @Test
@@ -140,12 +153,15 @@ class BookingServiceImplTest {
         assertEquals(List.of(bookingDto), bookingService.getBookingsByOwnerId(owner.getId(), "CURRENT", 0, 1));
         assertEquals(List.of(booking2), bookingService.getBookingsByOwnerId(owner.getId(), "ALL", 0, 1));
         ValidationException exception = assertThrows(ValidationException.class,
-                new Executable() {
-                    @Override
-                    public void execute() throws Throwable {
-                        bookingService.getBookingsByOwnerId(owner.getId(), "PPPP", 0, 1);
-                    }
-                });
+                () -> bookingService.getBookingsByOwnerId(owner.getId(), "PPPP", 0, 1));
         assertEquals("Unknown state: UNSUPPORTED_STATUS", exception.getMessage());
+        ValidationException exception2 = assertThrows(ValidationException.class,
+                () -> bookingService.getBookingsByOwnerId(owner.getId(), "PAST", -10, -10));
+        assertEquals("Ошибка параметров страницы. ", exception2.getMessage());
+        ValidationException exception3 = assertThrows(ValidationException.class,
+                () -> bookingService.getBookingsByOwnerId(owner.getId(), "ALL", -10, -10));
+        assertEquals("Ошибка параметров страницы. ", exception3.getMessage());
+
+
     }
 }

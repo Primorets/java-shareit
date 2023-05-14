@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 @Service
 public class BookingServiceImpl implements BookingService {
 
-
     @Autowired
     private BookingMapper bookingMapper;
     @Autowired
