@@ -58,20 +58,23 @@ class BookingServiceImplTest {
     void init() throws UserNotFoundException, ItemNotFoundException {
         owner = userService.createUser(new UserDto(null, "kamen", "kamen@gmail.com"));
         booker = userService.createUser(new UserDto(null, "kamen1", "kamen1@gmail.com"));
-        itemDto = itemService.createItem(new ItemDto(null, "lom", "black", true, UserMapper.toUser(owner), null, null, null, null), owner.getId());
-        bookingDto = bookingService.createBooking(new InputBookingDto(1L, LocalDateTime.now(), LocalDateTime.now().plusHours(1)), 2L);
-
+        itemDto = itemService.createItem(new ItemDto(null, "lom", "black", true,
+                UserMapper.toUser(owner), null, null, null, null), owner.getId());
+        bookingDto = bookingService.createBooking(new InputBookingDto(1L, LocalDateTime.now(),
+                LocalDateTime.now().plusHours(1)), 2L);
     }
 
     @Test
     void createBookingTest() {
-        BookingDto booking2 = bookingService.createBooking(new InputBookingDto(1L, LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3)), booker.getId());
+        BookingDto booking2 = bookingService.createBooking(new InputBookingDto(1L,
+                LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3)), booker.getId());
         assertEquals(booking2.getId(), 2L);
     }
 
     @Test
     void createBookingNotValidUser() {
-        InputBookingDto bookingDto1 = new InputBookingDto(1L, LocalDateTime.now(), LocalDateTime.now().plusHours(5));
+        InputBookingDto bookingDto1 = new InputBookingDto(1L, LocalDateTime.now(),
+                LocalDateTime.now().plusHours(5));
         UserNotFoundException userNotFoundException = assertThrows(UserNotFoundException.class,
                 () -> bookingService.createBooking(bookingDto1, 25L));
         assertEquals("Пользователь не был зарегестрирован.", userNotFoundException.getMessage());
@@ -111,7 +114,8 @@ class BookingServiceImplTest {
 
     @Test
     void getBookingByIdTest() {
-        BookingDto booking2 = bookingService.createBooking(new InputBookingDto(1L, LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3)), booker.getId());
+        BookingDto booking2 = bookingService.createBooking(new InputBookingDto(1L,
+                LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3)), booker.getId());
         assertEquals(booking2, bookingService.getBookingById(2L, 1L));
         BookingNotFoundException exception = assertThrows(BookingNotFoundException.class,
                 () -> bookingService.getBookingById(5L, 1L));
@@ -129,28 +133,41 @@ class BookingServiceImplTest {
 
     @Test
     void getBookingsByBookerIdTest() {
-        BookingDto booking2 = bookingService.createBooking(new InputBookingDto(1L, LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3)), booker.getId());
-        assertEquals(List.of(booking2), bookingService.getBookingsByBookerId(booker.getId(), "WAITING", 0, 1));
-        assertEquals(new ArrayList<>(), bookingService.getBookingsByBookerId(booker.getId(), "REJECTED", 0, 1));
-        assertEquals(new ArrayList<>(), bookingService.getBookingsByBookerId(booker.getId(), "PAST", 0, 1));
-        assertEquals(List.of(booking2), bookingService.getBookingsByBookerId(booker.getId(), "FUTURE", 0, 1));
-        assertEquals(List.of(bookingDto), bookingService.getBookingsByBookerId(booker.getId(), "CURRENT", 0, 1));
-        assertEquals(List.of(booking2), bookingService.getBookingsByBookerId(booker.getId(), "ALL", 0, 1));
+        BookingDto booking2 = bookingService.createBooking(new InputBookingDto(1L,
+                LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3)), booker.getId());
+        assertEquals(List.of(booking2), bookingService.getBookingsByBookerId(booker.getId(),
+                "WAITING", 0, 1));
+        assertEquals(new ArrayList<>(), bookingService.getBookingsByBookerId(booker.getId(),
+                "REJECTED", 0, 1));
+        assertEquals(new ArrayList<>(), bookingService.getBookingsByBookerId(booker.getId(),
+                "PAST", 0, 1));
+        assertEquals(List.of(booking2), bookingService.getBookingsByBookerId(booker.getId(),
+                "FUTURE", 0, 1));
+        assertEquals(List.of(bookingDto), bookingService.getBookingsByBookerId(booker.getId(),
+                "CURRENT", 0, 1));
+        assertEquals(List.of(booking2), bookingService.getBookingsByBookerId(booker.getId(),
+                "ALL", 0, 1));
         ValidationException exception = assertThrows(ValidationException.class,
                 () -> bookingService.getBookingsByBookerId(booker.getId(), "PPPP", 0, 1));
         assertEquals("Unknown state: UNSUPPORTED_STATUS", exception.getMessage());
-
     }
 
     @Test
     void getBookingsByOwnerIdTest() throws ValidationException {
-        BookingDto booking2 = bookingService.createBooking(new InputBookingDto(1L, LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3)), booker.getId());
-        assertEquals(List.of(booking2), bookingService.getBookingsByOwnerId(owner.getId(), "WAITING", 0, 1));
-        assertEquals(new ArrayList<>(), bookingService.getBookingsByOwnerId(owner.getId(), "REJECTED", 0, 1));
-        assertEquals(new ArrayList<>(), bookingService.getBookingsByOwnerId(owner.getId(), "PAST", 0, 1));
-        assertEquals(List.of(booking2), bookingService.getBookingsByOwnerId(owner.getId(), "FUTURE", 0, 1));
-        assertEquals(List.of(bookingDto), bookingService.getBookingsByOwnerId(owner.getId(), "CURRENT", 0, 1));
-        assertEquals(List.of(booking2), bookingService.getBookingsByOwnerId(owner.getId(), "ALL", 0, 1));
+        BookingDto booking2 = bookingService.createBooking(new InputBookingDto(1L,
+                LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3)), booker.getId());
+        assertEquals(List.of(booking2), bookingService.getBookingsByOwnerId(owner.getId(),
+                "WAITING", 0, 1));
+        assertEquals(new ArrayList<>(), bookingService.getBookingsByOwnerId(owner.getId(),
+                "REJECTED", 0, 1));
+        assertEquals(new ArrayList<>(), bookingService.getBookingsByOwnerId(owner.getId(),
+                "PAST", 0, 1));
+        assertEquals(List.of(booking2), bookingService.getBookingsByOwnerId(owner.getId(),
+                "FUTURE", 0, 1));
+        assertEquals(List.of(bookingDto), bookingService.getBookingsByOwnerId(owner.getId(),
+                "CURRENT", 0, 1));
+        assertEquals(List.of(booking2), bookingService.getBookingsByOwnerId(owner.getId(),
+                "ALL", 0, 1));
         ValidationException exception = assertThrows(ValidationException.class,
                 () -> bookingService.getBookingsByOwnerId(owner.getId(), "PPPP", 0, 1));
         assertEquals("Unknown state: UNSUPPORTED_STATUS", exception.getMessage());
@@ -160,7 +177,5 @@ class BookingServiceImplTest {
         ValidationException exception3 = assertThrows(ValidationException.class,
                 () -> bookingService.getBookingsByOwnerId(owner.getId(), "ALL", -10, -10));
         assertEquals("Ошибка параметров страницы. ", exception3.getMessage());
-
-
     }
 }
