@@ -50,7 +50,6 @@ class BookingServiceImplTest {
     private BookingMapper bookingMapper;
     private ItemDto itemDto;
     private UserDto owner;
-
     private BookingDto bookingDto;
 
     private UserDto booker;
