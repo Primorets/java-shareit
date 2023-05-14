@@ -33,13 +33,15 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public ItemRequestDto createItemRequest(ItemRequestDto itemRequestDto, Long requestorId, LocalDateTime now) {
         validRequest(itemRequestDto);
-        return itemRequestMapper.toItemRequestDto(itemRequestRepository.save(itemRequestMapper.toItemRequest(itemRequestDto, now, requestorId)));
+        return itemRequestMapper.toItemRequestDto(itemRequestRepository
+                .save(itemRequestMapper.toItemRequest(itemRequestDto, now, requestorId)));
     }
 
     @Override
     public ItemRequestDto getItemRequestById(Long itemRequestId, Long userId) {
         checkUserId(userId);
-        return itemRequestMapper.toItemRequestDto(itemRequestRepository.findById(itemRequestId).orElseThrow(() -> new ItemRequestNotFoundException("")));
+        return itemRequestMapper.toItemRequestDto(itemRequestRepository.findById(itemRequestId)
+                .orElseThrow(() -> new ItemRequestNotFoundException("Запрос не найден.")));
     }
 
     @Override
@@ -55,7 +57,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
             throws ItemRequestNotFoundException {
         checkUserId(userId);
         if (size < 1 || from < 0) {
-            throw new ValidationException(" ");
+            throw new ValidationException("Не правильные параметры пангинации. ");
         }
         return itemRequestRepository.findAll(Pagination.makePageRequest(from, size)).stream()
                 .collect(toList())
